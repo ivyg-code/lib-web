@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniCampus Library - Register</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f8f9fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .register-wrapper { width: 100%; max-width: 480px; }
+        .register-header { text-align: center; margin-bottom: 30px; color: black; background: #f8f9fa; padding: 30px; border-radius: 15px; }
+        .register-header h1 { font-size: 36px; margin-bottom: 10px; }
+        .register-header p { font-size: 16px; opacity: 0.9; }
+        .register-container { background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden; padding: 40px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #333; }
+        .form-group input { width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; }
+        .form-group input:focus { outline: none; border-color: #4a90e2; box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1); }
+        .btn-register { width: 100%; padding: 16px; background: linear-gradient(135deg, #4a90e2, #357abd); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; margin-top: 10px; }
+        .btn-register:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(74, 144, 226, 0.4); }
+        .register-status { padding: 15px; margin-top: 15px; border-radius: 10px; text-align: center; display: none; }
+        .register-status.show { display: block; }
+        .register-status.success { background: #d4edda; color: #155724; }
+        .register-status.error { background: #f8d7da; color: #721c24; }
+        .register-footer { text-align: center; padding: 20px; background: #f8f9fa; border-top: 1px solid #e0e0e0; }
+        .register-footer p { font-size: 14px; color: #666; margin: 8px 0; }
+        .register-footer a { color: #4a90e2; text-decoration: none; font-weight: 600; }
+        .register-footer a:hover { text-decoration: underline; }
+        @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } .register-container { padding: 25px; } .register-header h1 { font-size: 28px; } }
+    </style>
+</head>
+<body>
+    <div class="register-wrapper">
+        <div class="register-header">
+            <h1><i class="fas fa-user-plus"></i> Student Registration</h1>
+            <p>Create a new account to access the library</p>
+        </div>
+        
+        <div class="register-container">
+            <form id="registrationForm" onsubmit="handleRegistration(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="Enter first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Enter last name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentId">Student ID</label>
+                    <input type="text" id="studentId" placeholder="Enter student ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="Enter phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </form>
+            <div id="registrationStatus" class="register-status"></div>
+        </div>
+        
+        <div class="register-footer">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Shared hash function — must match login.html exactly
+        async function hashPassword(password) {
+            const msgBuffer = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function handleRegistration(event) {
+            event.preventDefault();
+            
+            const statusDiv = document.getElementById('registrationStatus');
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const studentId = document.getElementById('studentId').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                statusDiv.innerHTML = '<p class="error"><i class="fas fa-exclamation-circle"></i> Passwords do not match</p>';
+                statusDiv.className = 'register-status show error';
+                return;
+            }
+            
+            if (password.length < 6) {
+                statusDiv.innerHTML = '<p class="error"><i class="fas fa-exclamation-circle"></i> Password must be at least 6 characters</p>';
+                statusDiv.className = 'register-status show error';
+                return;
+            }
+            
+            const students = JSON.parse(localStorage.getItem('library_students')) || [];
+            const existingStudent = students.find(s => s.studentId === studentId || s.email === email);
+            
+            if (existingStudent) {
+                statusDiv.innerHTML = '<p class="error"><i class="fas fa-exclamation-circle"></i> An account with this Student ID or Email already exists</p>';
+                statusDiv.className = 'register-status show error';
+                return;
+            }
+            
+            const passwordHash = await hashPassword(password);
+            
+            const newStudent = {
+                id: Date.now(),
+                studentId: studentId,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                passwordHash: passwordHash,
+                registrationDate: new Date().toISOString()
+            };
+            
+            students.push(newStudent);
+            localStorage.setItem('library_students', JSON.stringify(students));
+            localStorage.setItem('current_student', JSON.stringify(newStudent));
+            
+            statusDiv.innerHTML = '<p class="success"><i class="fas fa-check-circle"></i> Registration successful! Redirecting to your account...</p>';
+            statusDiv.className = 'register-status show success';
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniCampus Library - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .login-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .login-tabs {
+            display: flex;
+            background: #f0f0f0;
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-tab.active {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+        }
+
+        .login-tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        .login-status {
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .login-status.show {
+            display: block;
+        }
+
+        .login-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .login-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .login-footer p {
+            font-size: 14px;
+            color: #666;
+            margin: 8px 0;
+        }
+
+        .login-footer a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .tab-content {
+                padding: 25px;
+            }
+
+            .login-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-header">
+            <h1><i class="fas fa-book-reader"></i> OmniCampus Library</h1>
+            <p>Please login to access your account</p>
+        </div>
+        
+        <div class="login-container">
+            <div class="login-tabs">
+                <button class="login-tab active" onclick="switchTab('student')">
+                    <i class="fas fa-user-graduate"></i> Student
+                </button>
+                <button class="login-tab" onclick="switchTab('admin')">
+                    <i class="fas fa-user-shield"></i> Admin
+                </button>
+            </div>
+            
+            <!-- Student Login Tab -->
+            <div id="student-tab" class="tab-content active">
+                <form id="studentLoginForm" onsubmit="handleStudentLogin(event)">
+                    <div class="form-group">
+                        <label for="studentUserId">Student ID / Email</label>
+                        <input type="text" id="studentUserId" placeholder="Enter your student ID or email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPassword">Password</label>
+                        <input type="password" id="studentPassword" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Student Login
+                    </button>
+                </form>
+                <div id="studentLoginStatus" class="login-status"></div>
+                <div class="login-footer">
+                    <p>New student? <a href="register.html">Register here</a></p>
+                </div>
+            </div>
+            
+            <!-- Admin Login Tab -->
+            <div id="admin-tab" class="tab-content">
+                <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label for="adminUserId">Admin Username / Email</label>
+                        <input type="text" id="adminUserId" placeholder="Enter admin username or email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Admin Login
+                    </button>
+                </form>
+                <div id="adminLoginStatus" class="login-status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Shared hash function — matches register.html exactly ──────────────────
+        async function hashPassword(password) {
+            const msgBuffer = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // ── Tab switching ─────────────────────────────────────────────────────────
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.login-tab');
+            tabs.forEach(t => t.classList.remove('active'));
+
+            if (tab === 'student') {
+                tabs[0].classList.add('active');
+                document.getElementById('student-tab').classList.add('active');
+                document.getElementById('admin-tab').classList.remove('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('admin-tab').classList.add('active');
+                document.getElementById('student-tab').classList.remove('active');
+            }
+        }
+
+        // ── Seed default admin on first load ──────────────────────────────────────
+        // Default password: Admin@123  (change this after first login)
+        async function initializeAdminData() {
+            const existing = JSON.parse(localStorage.getItem('library_admins') || '[]');
+            if (existing.length > 0) return;
+
+            const admins = [{
+                id: 1,
+                username: 'admin',
+                email: 'admin@omnicampus.edu',
+                passwordHash: await hashPassword('Admin@123'),
+                role: 'admin',
+                name: 'System Administrator'
+            }];
+            localStorage.setItem('library_admins', JSON.stringify(admins));
+        }
+
+        // ── Student Login ─────────────────────────────────────────────────────────
+        async function handleStudentLogin(event) {
+            event.preventDefault();
+
+            const statusDiv = document.getElementById('studentLoginStatus');
+            const userId    = document.getElementById('studentUserId').value.trim();
+            const password  = document.getElementById('studentPassword').value;
+
+            // Validate inputs
+            if (!userId || !password) {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your ID/email and password.';
+                statusDiv.className = 'login-status show error';
+                return;
+            }
+
+            const students = JSON.parse(localStorage.getItem('library_students') || '[]');
+            const student  = students.find(s => s.studentId === userId || s.email === userId);
+
+            if (!student) {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> No account found with that ID or email.';
+                statusDiv.className = 'login-status show error';
+                return;
+            }
+
+            // Hash what the user typed and compare against stored hash
+            const inputHash = await hashPassword(password);
+            if (inputHash !== student.passwordHash) {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Incorrect password. Please try again.';
+                statusDiv.className = 'login-status show error';
+                return;
+            }
+
+            // Store session without the password hash
+            const session = {
+                id: student.id, studentId: student.studentId,
+                firstName: student.firstName, lastName: student.lastName,
+                email: student.email, role: 'student'
+            };
+            localStorage.setItem('current_student', JSON.stringify(session));
+
+            statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting…';
+            statusDiv.className = 'login-status show success';
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+        }
+
+        // ── Admin Login ───────────────────────────────────────────────────────────
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+
+            const statusDiv = document.getElementById('adminLoginStatus');
+            const userId    = document.getElementById('adminUserId').value.trim();
+            const password  = document.getElementById('adminPassword').value;
+
+            if (!userId || !password) {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your username/email and password.';
+                statusDiv.className = 'login-status show error';
+                return;
+            }
+
+            const admins = JSON.parse(localStorage.getItem('library_admins') || '[]');
+            const admin  = admins.find(a => a.username === userId || a.email === userId);
+
+            if (!admin) {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> No admin account found with that username or email.';
+                statusDiv.className = 'login-status show error';
+                return;
+            }
+
+            const inputHash = await hashPassword(password);
+            if (inputHash !== admin.passwordHash) {
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Incorrect password. Please try again.';
+                statusDiv.className = 'login-status show error';
+                return;
+            }
+
+            // Store session without the password hash
+            const session = {
+                id: admin.id, username: admin.username,
+                email: admin.email, name: admin.name, role: 'admin'
+            };
+            localStorage.setItem('current_admin', JSON.stringify(session));
+
+            statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting…';
+            statusDiv.className = 'login-status show success';
+            setTimeout(() => { window.location.href = 'ADMIN/index.html'; }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeAdminData);
+    </script>
+</body>
+</html>

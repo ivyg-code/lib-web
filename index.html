@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniCampus Library Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+<nav class="sidebar">
+            <h2>OmniCampus</h2>
+            <p>LIBRARY</p>
+            <ul id="navMenu">
+                <li onclick="showSection('My Account')" class="active"><i class="fas fa-user-circle"></i> My Account</li>
+                <li onclick="showSection('View Books')"><i class="fas fa-book"></i> View Books</li>
+                <li onclick="showSection('Book Request')"><i class="fas fa-request-book"></i> Request Book</li>
+                <li onclick="showSection('My Issued Books')"><i class="fas fa-book-reader"></i> My Issued Books</li>
+                <li onclick="showSection('Borrowing History')"><i class="fas fa-history"></i> Borrowing History</li>
+                <li onclick="showSection('Feedback & Support')"><i class="fas fa-comment-dots"></i> Feedback</li>
+                <li onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </nav>
+        
+        <main class="main-content">
+            <!-- My Account Section -->
+            <section id="My Account" class="content-section">
+                <div class="section-header">
+                    <h1>My Account</h1>
+                    <p>Welcome to OmniCampus Library</p>
+                </div>
+                
+                <div class="welcome-banner" id="welcomeBanner">
+                    <div class="welcome-content">
+                        <h2><i class="fas fa-graduation-cap"></i> Welcome to OmniCampus Library</h2>
+                        <p>Access thousands of books, journals, and digital resources</p>
+                    </div>
+                </div>
+                
+                <div class="logged-in-welcome" id="loggedInWelcome" style="display: none;">
+                    <div class="welcome-card">
+                        <div class="welcome-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="welcome-info">
+                            <h2 id="welcomeName">Welcome, Student!</h2>
+                            <p id="welcomeStudentId">Student ID: -</p>
+                            <p class="welcome-email" id="welcomeEmail">email@example.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="account-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-book"></i>
+                            <div class="stat-info">
+                                <h3 id="booksBorrowed">0</h3>
+                                <p>Books Borrowed</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-info">
+                                <h3 id="booksReturned">0</h3>
+                                <p>Returned</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="stat-info">
+                                <h3 id="booksOverdue">0</h3>
+                                <p>Overdue</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div class="stat-info">
+                                <h3 id="totalFines">KSh 0</h3>
+                                <p>Total Fines</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="showSection('View Books')">
+                                <i class="fas fa-search"></i> Browse Books
+                            </button>
+                            <button class="action-btn" onclick="showSection('Book Request')">
+                                <i class="fas fa-request-book"></i> Request Book
+                            </button>
+                            <button class="action-btn" onclick="showSection('My Issued Books')">
+                                <i class="fas fa-list"></i> My Issued Books
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="account-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-book-open"></i> Library Hours</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="hours-list">
+                                <div class="hours-item">
+                                    <span class="day">Monday - Friday</span>
+                                    <span class="time">8:00 AM - 8:00 PM</span>
+                                </div>
+                                <div class="hours-item">
+                                    <span class="day">Saturday</span>
+                                    <span class="time">9:00 AM - 5:00 PM</span>
+                                </div>
+                                <div class="hours-item">
+                                    <span class="day">Sunday</span>
+                                    <span class="time">Closed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-info-circle"></i> News & Updates</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="news-list">
+                                <div class="news-item">
+                                    <h4>New Books Added</h4>
+                                    <p>Check out our latest collection of programming books!</p>
+                                    <span class="news-date">Jan 15, 2024</span>
+                                </div>
+                                <div class="news-item">
+                                    <h4>Extended Hours</h4>
+                                    <p>Library will be open until 10 PM during exam period.</p>
+                                    <span class="news-date">Jan 10, 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Student Registration Section -->
+            <section id="Student Registration" class="content-section">
+                <div class="section-header">
+                    <h1>Student Registration</h1>
+                    <p>Create a new account to access the library</p>
+                </div>
+                
+                <div class="registration-container">
+                    <div class="registration-card">
+                        <div class="registration-header">
+                            <i class="fas fa-user-plus"></i>
+                            <h2>Register New Account</h2>
+                        </div>
+<form id="studentRegistrationForm" class="registration-form" onsubmit="return handleStudentRegistration(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="regFirstName">First Name</label>
+                                    <input type="text" id="regFirstName" placeholder="Enter first name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="regLastName">Last Name</label>
+                                    <input type="text" id="regLastName" placeholder="Enter last name" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="regEmail">Email Address</label>
+                                <input type="email" id="regEmail" placeholder="Enter email address" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="regStudentId">Student ID</label>
+                                <input type="text" id="regStudentId" placeholder="Enter student ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="regPhone">Phone Number</label>
+                                <input type="tel" id="regPhone" placeholder="Enter phone number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="regPassword">Password</label>
+                                <input type="password" id="regPassword" placeholder="Create a password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="regConfirmPassword">Confirm Password</label>
+                                <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">
+                                <i class="fas fa-user-plus"></i> Register
+                            </button>
+                        </form>
+                        <div id="registrationStatus" class="registration-status"></div>
+                        <div class="registration-footer">
+                            <p>Already have an account? <a href="#" onclick="showSection('Student Login')">Login here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Student Login Section -->
+            <section id="Student Login" class="content-section">
+                <div class="section-header">
+                    <h1>Student Login</h1>
+                    <p>Login to access your library account</p>
+                </div>
+                
+                <div class="student-login-container">
+                    <div class="login-card">
+                        <div class="login-header">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <h2>Student Login</h2>
+                        </div>
+                        <form id="studentLoginForm" class="login-form" onsubmit="handleStudentLogin(event)">
+                            <div class="form-group">
+                                <label for="studentId">Student ID / Email</label>
+                                <input type="text" id="studentId" placeholder="Enter student ID or email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentPassword">Password</label>
+                                <input type="password" id="studentPassword" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                            <div class="login-links">
+                                <a href="#" onclick="showSection('Password Recovery')">Forgot Password?</a>
+                            </div>
+                        </form>
+                        <div id="studentLoginStatus" class="login-status"></div>
+                        <div class="registration-footer">
+                            <p>Don't have an account? <a href="#" onclick="showSection('Student Registration')">Register here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- View Books Section -->
+            <section id="View Books" class="content-section">
+                <div class="section-header">
+                    <h1>View Available Books</h1>
+                    <p>Browse and search books in the library</p>
+                </div>
+                
+                <div class="view-books-container">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" id="bookSearchInput" placeholder="Search by title, author, ISBN..." onkeyup="searchBooks()">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="filter-group">
+                            <select id="categoryFilter" onchange="filterBooksByCategory()">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="books-grid" id="booksGrid">
+                        <!-- Books will be loaded here -->
+                    </div>
+                    
+                    <div class="no-books-message" id="noBooksMessage" style="display: none;">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No books found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Book Request Section -->
+            <section id="Book Request" class="content-section">
+                <div class="section-header">
+                    <h1>My Book Requests</h1>
+                    <p>View your book request history</p>
+                </div>
+                
+                <div class="my-requests-section">
+                    <div class="requests-table-container">
+                        <table class="data-table" id="myRequestsTable">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Book Title</th>
+                                    <th>Author</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myRequestsTableBody">
+                                <!-- Requests will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- My Issued Books Section -->
+            <section id="My Issued Books" class="content-section">
+                <div class="section-header">
+                    <h1>My Issued Books</h1>
+                    <p>View your currently issued books, due dates, and fines</p>
+                </div>
+                
+                <div class="my-issued-container">
+                    <div class="issued-books-summary">
+                        <div class="summary-card">
+                            <i class="fas fa-book-reader"></i>
+                            <div class="summary-info">
+                                <h3 id="currentlyIssued">0</h3>
+                                <p>Currently Issued</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <i class="fas fa-clock"></i>
+                            <div class="summary-info">
+                                <h3 id="dueSoon">0</h3>
+                                <p>Due Soon</p>
+                            </div>
+                        </div>
+                        <div class="summary-card overdue">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="summary-info">
+                                <h3 id="overdueBooks">0</h3>
+                                <p>Overdue</p>
+                            </div>
+                        </div>
+                        <div class="summary-card fine">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div class="summary-info">
+                                <h3 id="currentFines">KSh 0</h3>
+                                <p>Current Fines</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="issued-books-table-container">
+                        <h3>Currently Issued Books</h3>
+                        <table class="data-table" id="myIssuedBooksTable">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Days Left</th>
+                                    <th>Fine</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myIssuedBooksTableBody">
+                                <!-- Issued books will be loaded here -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="no-issued-message" id="noIssuedMessage" style="display: none;">
+                            <i class="fas fa-book"></i>
+                            <h3>No books currently issued</h3>
+                            <p>Visit the library to borrow books</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Borrowing History Section -->
+            <section id="Borrowing History" class="content-section">
+                <div class="section-header">
+                    <h1>Borrowing History</h1>
+                    <p>View all your past and current loans</p>
+                </div>
+                
+                <div class="borrowing-history-container">
+                    <div class="borrowing-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Book Title</th>
+                                    <th>Author</th>
+                                    <th>Date Issued</th>
+                                    <th>Return Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="borrowingHistoryTableBody">
+                                <!-- Borrowing history will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="borrowing-summary">
+                        <div class="summary-card">
+                            <h3><i class="fas fa-book"></i> Total Borrowed</h3>
+                            <p class="summary-number" id="totalBorrowed">0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h3><i class="fas fa-check-circle"></i> Returned</h3>
+                            <p class="summary-number" id="totalReturned">0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h3><i class="fas fa-clock"></i> Pending</h3>
+                            <p class="summary-number" id="totalPending">0</p>
+                        </div>
+                        <div class="summary-card">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Overdue</h3>
+                            <p class="summary-number" id="totalOverdue">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Profile Management Section -->
+            <section id="Profile Management" class="content-section">
+                <div class="section-header">
+                    <h1>Profile Management</h1>
+                    <p>View and update your profile information</p>
+                </div>
+                
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <h2 id="profileName">Student Name</h2>
+                            <p id="profileStudentId">Student ID</p>
+                        </div>
+                        <div class="profile-body">
+                            <form id="profileForm" onsubmit="updateProfile(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profileFirstName">First Name</label>
+                                        <input type="text" id="profileFirstName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileLastName">Last Name</label>
+                                        <input type="text" id="profileLastName" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileEmail">Email</label>
+                                    <input type="email" id="profileEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilePhone">Phone</label>
+                                    <input type="tel" id="profilePhone" required>
+                                </div>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Update Profile
+                                </button>
+                            </form>
+                            <div id="profileStatus" class="form-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="password-change-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-key"></i> Change Password</h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="passwordChangeForm" onsubmit="changePassword(event)">
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password</label>
+                                    <input type="password" id="currentPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword">New Password</label>
+                                    <input type="password" id="newPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmNewPassword">Confirm New Password</label>
+                                    <input type="password" id="confirmNewPassword" required>
+                                </div>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-key"></i> Change Password
+                                </button>
+                            </form>
+                            <div id="passwordChangeStatus" class="form-status"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Password Recovery Section -->
+            <section id="Password Recovery" class="content-section">
+                <div class="section-header">
+                    <h1>Change Password</h1>
+                    <p>Reset your password or change to a new one</p>
+                </div>
+                
+                <div class="password-recovery-container">
+                    <div class="recovery-card">
+                        <div class="recovery-header">
+                            <i class="fas fa-key"></i>
+                            <h2>Reset Your Password</h2>
+                        </div>
+                        <form id="passwordRecoveryForm" onsubmit="recoverPassword(event)">
+                            <div class="form-group">
+                                <label for="recoveryStudentId">Student ID / Email</label>
+                                <input type="text" id="recoveryStudentId" placeholder="Enter your student ID or email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recoveryNewPassword">New Password</label>
+                                <input type="password" id="recoveryNewPassword" placeholder="Enter new password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recoveryConfirmPassword">Confirm New Password</label>
+                                <input type="password" id="recoveryConfirmPassword" placeholder="Confirm new password" required>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">
+                                <i class="fas fa-key"></i> Reset Password
+                            </button>
+                        </form>
+                        <div id="recoveryStatus" class="recovery-status"></div>
+                        <div class="recovery-footer">
+                            <p>Remember your password? <a href="#" onclick="showSection('Student Login')">Login here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Feedback & Support Section -->
+            <section id="Feedback & Support" class="content-section">
+                <div class="section-header">
+                    <h1>Feedback & Support</h1>
+                    <p>Send us your feedback, suggestions, or report any issues</p>
+                </div>
+                
+                <div class="feedback-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-comment-dots"></i> Submit Feedback</h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                                <div class="form-group">
+                                    <label for="feedbackCategory">Category</label>
+                                    <select id="feedbackCategory" required>
+                                        <option value="">Select a category</option>
+                                        <option value="Suggestion">Suggestion</option>
+                                        <option value="Complaint">Complaint</option>
+                                        <option value="General">General Inquiry</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="feedbackMessage">Your Message</label>
+                                    <textarea id="feedbackMessage" placeholder="Write your feedback here..." rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Submit Feedback
+                                </button>
+                            </form>
+                            <div id="feedbackStatus" class="form-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-address-book"></i> Contact Librarian</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="contact-info-item">
+                                <i class="fas fa-user"></i>
+                                <div>
+                                    <h4>Ms. Sarah Johnson</h4>
+                                    <p>Head Librarian</p>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h4>library@omnicampus.edu</h4>
+                                    <p>Email</p>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>+254 700 123456</h4>
+                                    <p>Phone</p>
+                                </div>
+                            </div>
+                            <div class="contact-info-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Mon - Fri: 8:00 AM - 5:00 PM</h4>
+                                    <p>Office Hours</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+<script src="script (1).js"></script>
+</body>
+</html>
